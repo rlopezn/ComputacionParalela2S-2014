@@ -9,6 +9,8 @@ Created on 18/08/2014
 import numpy as np
 from StringIO import StringIO
 import random
+import matplotlib.pyplot as plt
+
 
 
 def contarUnosMatriz(fila,columna,matriz):
@@ -23,10 +25,9 @@ def contarUnosMatriz(fila,columna,matriz):
 def llenarMatrizProbabilidad(fila,columna,matriz,probabilidad):
     cantPuntos=fila*columna
     prob=probabilidad/100.0
-    print "probabilidad"+str(prob)
+    print "probabilidad de llenado : "+str(prob)
     cantLlenarPuntos=int(prob*cantPuntos)
-    print "cantLLenas :"+str(cantLlenarPuntos)
-    print str(cantLlenarPuntos)
+    print "cantidad puntos por LLenar :"+str(cantLlenarPuntos)
     i=1
     while(i<cantLlenarPuntos):
         aleatorioX=random.randrange(fila)
@@ -35,21 +36,39 @@ def llenarMatrizProbabilidad(fila,columna,matriz,probabilidad):
             matriz[aleatorioX][aleatorioY]=1
             i+=1
     return matriz
-              
-#----------MAIN-----------------              
+
+def graficoPercolacion(matriz,ax):
+    ax.imshow(matriz,cmap=plt.cm.gray,interpolation='nearest') #nearest
+    ax.set_title('Umbral Percolacion')
+    # Move left and bottom spines outward by 10 points
+    ax.spines['left'].set_position(('outward', 10))
+    ax.spines['bottom'].set_position(('outward', 10))
+    # Hide the right and top spines
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    # Only show ticks on the left and bottom spines
+    ax.yaxis.set_ticks_position('left')
+    ax.xaxis.set_ticks_position('bottom')#bottom
+    plt.show()
+
+#----------MAIN-----------------    
+          
 filaMatriz=10
 columnaMatriz=10
+probLlenado=80
 print "Matriz : ["+str(filaMatriz)+"]["+str(columnaMatriz)+"]"
 matrizCeros=np.zeros((filaMatriz,columnaMatriz))
 print matrizCeros
-matrix=llenarMatrizProbabilidad(filaMatriz,columnaMatriz,matrizCeros,80)
-print "cantidad de unos :"+str(contarUnosMatriz(filaMatriz,columnaMatriz,matrix))
+matrix=llenarMatrizProbabilidad(filaMatriz,columnaMatriz,matrizCeros,probLlenado)
+print "cantidad de unos(contar) :"+str(contarUnosMatriz(filaMatriz,columnaMatriz,matrix))
 print matrix
 #print matrix
 
-
-
-
+#---------Graficas------------------------
+# 1 es blanco - 0 es negro
+fig, ax = plt.subplots()
+graficoPercolacion(matrix,ax)
+#-------------------------------------------
 
 
 print "hola mundo"
