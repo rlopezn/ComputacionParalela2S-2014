@@ -10,6 +10,8 @@ Integrantes
 - Ricardo Lopez
 - Francisco Ramirez
 
-Repositorio para la asignatura de Computación Paralela, 2do Semestre 2014
+===========================================================================
+Repositorio para la asignatura de Computación Paralela, 2do Semestre 2014 
 Ingenieria Civil en Computación Mención Informática (21041)
 Universidad Tecnologica Metropolitana
+===========================================================================
