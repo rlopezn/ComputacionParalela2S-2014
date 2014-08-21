@@ -1,4 +1,4 @@
-ComputacionParalela2S-2014
+ComputacionParalela2S-2014- UTEM Chile
 ==========================
 
 Integrantes:
