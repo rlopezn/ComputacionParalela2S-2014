@@ -13,16 +13,27 @@ def menor100(num):
 		return num
 	else :
 		return num
-#Ingresa primer valor de la potencia, la base
-numero= int(input("Ingresar la base a^b \n " ))
+#Ingresa  valor de a
+numero= int(input("Ingresar a \n " ))
 numero = menor100(numero)
-#ingresa el exponente 
-numero2 = int(input("Ingresar exponente a^b \n"))
+#ingresa el valor de b
+numero2 = int(input("Ingresar b \n"))
 numero2 = menor100(numero2)
 #calcula la potencia
-potencia = numero**numero2
+potencia1 = numero**numero2
+potencia2 = numero2**numero 
 # recibe la suma de la funcion contador
-suma = contador(potencia)
-print("Suma digital")
-print(suma)
+suma1= contador(potencia1)
+suma2= contador(potencia2)
+#decide cual es mayor
+if(suma1<suma2):
+	print("Suma digital maxima pertenece  a b^a \n ")
+	print(suma2)
+elif(suma1== suma2):
+	print("Suma digital es la misma para ambos casos y es\n ")
+	print(suma2)
+else:
+	print("suma digital maxima pertenece a b^a \n")
+	print(suma1)
+	
 time.sleep(5.5) 
