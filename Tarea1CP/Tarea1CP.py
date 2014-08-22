@@ -1,28 +1,23 @@
 import time
+def contador(resultado):
+	if resultado<10:
+		return resultado
+	else :
+		return contador(int(resultado/10))+ resultado%10
+def menor100(num):
+	if num>100:
+		while (num>100):
+			num = int (input ("Numeros menores que 100 \n "))
+		return num
+	else :
+		return num
 
-def factor_primo(n):
-    factor = 1
-    # Eliminar cualquier factor de 2
-    while n % 2 ==0:
-        factor = 2
-        n = n/2
-
-    # Eliminar el resto de los factores impares
-    p = 3
-    while n != 1:
-        while n % p == 0:
-            factor = p
-            n = n/p
-        p+=2
-
-    return factor
-
-start = time.time()
-for i in range (100) : a = factor_primo (600851475143)
-
-    #Calculo de tiempo de ejecucion
-
-tiempo = (time.time() - start)
-print "El resultado %s ha retornado despues de %s segundos luego de 100 iteraciones. " % (a, tiempo)    
-
-
+numero= int(input("Ingresar la base a^b \n " ))
+numero = menor100(numero)
+numero2 = int(input("Ingresar exponente a^b \n"))
+numero2 = menor100(numero2)
+potencia = numero**numero2
+suma = contador(potencia)
+print("Suma digital")
+print(suma)
+time.sleep(5.5) 
