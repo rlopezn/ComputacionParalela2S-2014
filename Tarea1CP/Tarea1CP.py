@@ -1,28 +1,36 @@
 import time
+# suma los digitos uno por uno , de forma recursiva
+def contador(resultado):
+	if resultado<10:
+		return resultado
+	else :
+		return contador(int(resultado/10))+ resultado%10
 
-def factor_primo(n):
-    factor = 1
-    # Eliminar cualquier factor de 2
-    while n % 2 ==0:
-        factor = 2
-        n = n/2
+#Ingresa  valor de a
+numero= 0
+numaux1=0
+#ingresa el valor de b
+numero2 = 0
+numaux2=0
+aux = 0
+#itera los valores de a y b
+while (numero<100):
+	numero2=0
+	while (numero2<100):
+		potencia = numero**numero2 
+		if (aux<contador(potencia)):
+			aux = contador(potencia)
+			numaux = numero
+			numaux2 = numero2
+		numero2 =numero2 + 1
+		
+	numero = numero + 1
+print("la suma digital maxima para a^b" )
+print("a: \n")
+print(numaux)
+print("b: \n")
+print(numaux2)
+print("la suma es \n")
+print(aux)
 
-    # Eliminar el resto de los factores impares
-    p = 3
-    while n != 1:
-        while n % p == 0:
-            factor = p
-            n = n/p
-        p+=2
-
-    return factor
-
-start = time.time()
-for i in range (100) : a = factor_primo (600851475143)
-
-    #Calculo de tiempo de ejecucion
-
-tiempo = (time.time() - start)
-print "El resultado %s ha retornado despues de %s segundos luego de 100 iteraciones. " % (a, tiempo)    
-
-
+time.sleep(5.5) 
