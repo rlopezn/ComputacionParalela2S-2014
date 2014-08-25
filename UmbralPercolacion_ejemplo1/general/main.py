@@ -22,7 +22,8 @@ def contarUnosMatriz(fila,columna,matriz):
     return contador
                 
 
-def llenarMatrizProbabilidad(fila,columna,matriz,probabilidad):
+def llenarMatrizProbabilidad(fila,columna,probabilidad):
+    matriz=np.zeros((filaMatriz,columnaMatriz))
     cantPuntos=fila*columna
     prob=probabilidad/100.0
     print "probabilidad de llenado : "+str(prob)
@@ -52,16 +53,15 @@ def graficoPercolacion(matriz,ax):
     plt.show()
 
 #----------MAIN-----------------    
-          
+  #--datos iniciales-----        
 filaMatriz=10
 columnaMatriz=10
 probLlenado=80
 print "Matriz : ["+str(filaMatriz)+"]["+str(columnaMatriz)+"]"
-matrizCeros=np.zeros((filaMatriz,columnaMatriz))
-print matrizCeros
-matrix=llenarMatrizProbabilidad(filaMatriz,columnaMatriz,matrizCeros,probLlenado)
+matrix=llenarMatrizProbabilidad(filaMatriz,columnaMatriz,probLlenado)
 print "cantidad de unos(contar) :"+str(contarUnosMatriz(filaMatriz,columnaMatriz,matrix))
 print matrix
+
 #print matrix
 
 #---------Graficas------------------------
@@ -69,6 +69,3 @@ print matrix
 fig, ax = plt.subplots()
 graficoPercolacion(matrix,ax)
 #-------------------------------------------
-
-
-print "hola mundo"
