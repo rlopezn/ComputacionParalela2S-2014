@@ -1,26 +1,16 @@
-'''
-Created on 18/08/2014
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Aug 27 14:07:55 2014
 
-@author: macbookpro
-'''
-
-
+@author: paralela
+"""
 
 import numpy as np
 from StringIO import StringIO
 import random
 import matplotlib.pyplot as plt
 
-
-
-def contarUnosMatriz(fila,columna,matriz):
-    contador=1
-    for i in range(fila):
-        for j in range(columna):
-            if(matriz[i][j]==1):
-                contador+=1
-    return contador
-                
+import networkx as nx
 
 def llenarMatrizProbabilidad(fila,columna,probabilidad):
     matriz=np.zeros((filaMatriz,columnaMatriz))
@@ -37,7 +27,8 @@ def llenarMatrizProbabilidad(fila,columna,probabilidad):
             matriz[aleatorioX][aleatorioY]=1
             i+=1
     return matriz
-
+    
+    
 def graficoPercolacion(matriz,ax):
     ax.imshow(matriz,cmap=plt.cm.gray,interpolation='nearest') #nearest
     ax.set_title('Umbral Percolacion')
@@ -51,21 +42,37 @@ def graficoPercolacion(matriz,ax):
     ax.yaxis.set_ticks_position('left')
     ax.xaxis.set_ticks_position('bottom')#bottom
     plt.show()
+    
+def buscarCamino(matrix):
+    cantCaminos=0
+    return cantCaminos
+            
 
-#----------MAIN-----------------    
-  #--datos iniciales-----        
+                
+            
+    
+#----------MAIN--------------------------
+ 
+#----datos iniciales---------------------  
 filaMatriz=10
 columnaMatriz=10
-probLlenado=60
+probLlenado=70
 print "Matriz : ["+str(filaMatriz)+"]["+str(columnaMatriz)+"]"
 matrix=llenarMatrizProbabilidad(filaMatriz,columnaMatriz,probLlenado)
-print "cantidad de unos(contar) :"+str(contarUnosMatriz(filaMatriz,columnaMatriz,matrix))
+#print "cantidad de unos(contar) :"+str(contarUnosMatriz(filaMatriz,columnaMatriz,matrix))
 print matrix
 
-#print matrix
 
 #---------Graficas------------------------
 # 1 es blanco - 0 es negro
 fig, ax = plt.subplots()
 graficoPercolacion(matrix,ax)
-#-------------------------------------------
+#-----------------------------------------
+
+G = nx.from_numpy_matrix(matrix, create_using=nx.DiGraph())
+print(nx.dijkstra_path(G, 0, 1))
+
+
+
+
+
