@@ -69,7 +69,7 @@ fig, ax = plt.subplots()
 graficoPercolacion(matrix,ax)
 #-----------------------------------------
 
-G = nx.from_numpy_matrix(matrix, create_using=nx.DiGraph())
+G = nx.from_numpy_matrix(mlow, high=None, size=Noneatrix, create_using=nx.DiGraph())
 print(nx.dijkstra_path(G, 0, 1))
 
 
