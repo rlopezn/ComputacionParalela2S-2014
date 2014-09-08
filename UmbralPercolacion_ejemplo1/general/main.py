@@ -89,7 +89,8 @@ class AEstrella:
     # Devuelve una lista con los nodos vecinos transitables.
     def vecinos(self, nodo):
         vecinos = []
-        if self.mapa.mapa[nodo.pos[0]+1][nodo.pos[1]] != 0:
+        #if self.mapa.mapa[nodo.pos[0]+1][nodo.pos[1]] != 0:
+        if self.mapa.mapa[nodo.pos[0]][nodo.pos[1]] != 0:
             vecinos.append(Nodo([nodo.pos[0]+1, nodo.pos[1]], nodo))
         if self.mapa.mapa[nodo.pos[0]-1][nodo.pos[1]] != 0:
             vecinos.append(Nodo([nodo.pos[0]-1, nodo.pos[1]], nodo))
@@ -260,8 +261,9 @@ def puntoInicioFin(fila,matriz):
     for i in range(1):
         randInicio=random.randrange(fila)
         randFin=random.randrange(fila)
+        print "rand's inicio: "+str(randInicio)+"- fin :"+str(randFin)
         matriz[0][randInicio]=2
-        matriz[fila-1][randFin]=3
+        matriz[fila][randFin]=3
 
 
     return matriz
@@ -273,15 +275,15 @@ def puntoInicioFin(fila,matriz):
 #----------MAIN-----------------
   #--datos iniciales-----
 def main():
-    filaMatriz=10
-    columnaMatriz=10
-    probLlenado=60
+    filaMatriz=100
+    columnaMatriz=100
+    probLlenado=50
     print "Matriz : ["+str(filaMatriz)+"]["+str(columnaMatriz)+"]"
     matrix=llenarMatrizProbabilidad(filaMatriz,columnaMatriz,probLlenado)
     print "cantidad de unos(contar) :"+str(contarUnosMatriz(filaMatriz,columnaMatriz,matrix))
     print matrix
 
-    mapa=Mapa(puntoInicioFin(filaMatriz,matrix))
+    mapa=Mapa(puntoInicioFin(filaMatriz-1,matrix))
     print "MAPA al Inicio :"
     print mapa.mapa
 
