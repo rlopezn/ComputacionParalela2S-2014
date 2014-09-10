@@ -21,6 +21,7 @@ def buscarHorizontal():
     valor_mayor=-1
     i_mayor=0
     j_mayor=0
+    x=""
     for i in range (20):
         for j in range (17):
             for c in range (4):
@@ -34,7 +35,8 @@ def buscarHorizontal():
                 valor_mayor=result
                 i_mayor=i
                 j_mayor=j
-    print "---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(valor_mayor)
+                x="---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(data[i_mayor][j_mayor])+" y el valor es "+str(valor_mayor)
+    print x
                 
             
             
