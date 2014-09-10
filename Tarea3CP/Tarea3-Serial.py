@@ -34,7 +34,7 @@ def buscarHorizontal():
                 valor_mayor=result
                 i_mayor=i
                 j_mayor=j
-    #print "---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(data[i_mayor][j_mayor])+" y el valor es "+str(valor_mayor)
+                #print "---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(data[i_mayor][j_mayor])+" y el valor es "+str(valor_mayor)
     return (i_mayor,j_mayor,data[i_mayor][j_mayor],valor_mayor)            
             
 def buscarVertical():
@@ -58,11 +58,34 @@ def buscarVertical():
                 valor_mayor=result
                 i_mayor=i
                 j_mayor=j
-    #print "---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(data[i_mayor][j_mayor])+" y el valor es "+str(valor_mayor)
+                #print "---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(data[i_mayor][j_mayor])+" y el valor es "+str(valor_mayor)
     return (i_mayor,j_mayor,data[i_mayor][j_mayor],valor_mayor)             
             
+def buscarDiagonal():
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    i_mayor=0
+    j_mayor=0
+    for i in range (17):
+        for j in range (17):
+            for c in range (4):
+                #print "data["+str(i)+"]["+str(j)+"]="+str(data[i][j])
+                #print "["+str(i+c)+"]["+str(j+c)+"]="+str(data[i+c][j+c])
+                multi=multi*data[i+c][j+c]
+            result=multi
+            #print "multi: "+ str(result)
+            multi=1
+            if (result>valor_mayor):
+                valor_mayor=result
+                i_mayor=i
+                j_mayor=j
+                #print "---indice mayor horizontal: ["+str(i_mayor)+"]["+str(j_mayor)+"]= "+str(data[i_mayor][j_mayor])+" y el valor es "+str(valor_mayor)
+    return (i_mayor,j_mayor,data[i_mayor][j_mayor],valor_mayor)  
     
-    
+   
 #----------MAIN--------------------------
  
 #----datos iniciales---------------------  
@@ -79,4 +102,7 @@ print "Horizontal : (i,j,valor,total) = "+ str(indice_horizontal)
 
 indice_vertical=buscarVertical()
 print "Vertical   : (i,j,valor,total) = "+ str(indice_vertical)
+
+indice_diagonal=buscarDiagonal()
+print "Diagonal   : (i,j,valor,total) = "+ str(indice_diagonal)
 #print data
