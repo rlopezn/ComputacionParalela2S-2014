@@ -41,3 +41,4 @@ data=np.genfromtxt(StringIO(data)) #Se sobre entiende que los
 ##print matriz
 #
 buscarHorizontal()
+print data
