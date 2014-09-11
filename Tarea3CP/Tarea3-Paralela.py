@@ -15,15 +15,23 @@ comm = MPI.COMM_WORLD  # comunicador entre dos procesadores
 rank =  comm.rank     # id procesador actual 
 size =  comm.size     # cantidad de procesadores a usar
 
-def distribuirP(size):
+def distribuirEnP(size):
 
     if (rank==0):
         cuoc= (20*20)/size #c : cuociente
         rest= (20*20)%size #r : resto
+        ##print "resto:" +str(rest)
         conta=0
-        p=0
         for p in range (size):
-            comm.send (conta, dest = p)
+            #print p
+            if (p+1)!=size:
+                conta=conta+cuoc
+                comm.send (conta, dest = p)
+            else:
+                conta=conta+cuoc+rest
+                comm.send (conta, dest = p)
+                
+                
             
 
 # Se buscará de forma horizontal hacia la derecha hasta el casillero 17,
@@ -120,13 +128,9 @@ def comparar (horizontal,vertical,diagonal):
 
     
    
+
 #----------MAIN--------------------------
-#----------MAIN--------------------------
-#----------MAIN--------------------------
-#----------MAIN--------------------------
-#----------MAIN--------------------------
-   
-#----datos iniciales---------------------  
+#----------MAIN--------------------------  
 
 #Se comenzará por generar la una matriz a partir de lso datos entregados...
 #... en un archivo txt
@@ -134,12 +138,26 @@ def comparar (horizontal,vertical,diagonal):
 pfile=open('Tarea3.txt','r')
 data=pfile.read()
 pfile.close()
-print""
+
 
 #se sobre entiende que los delimitadores son espacios
 data=np.genfromtxt(StringIO(data)) 
 
-distribuirP(size)
+distribuirEnP(size)
+
+print ""
+if rank==0:
+    info=comm.recv(source=0)
+    print "rank 0 = "+ str(info)
+if rank==1:
+    info=comm.recv(source=0)
+    print "rank 1 = "+ str(info)
+if rank==2:
+    info=comm.recv(source=0)
+    print "rank 2 = "+ str(info)
+if rank==3:
+    info=comm.recv(source=0)
+    print "rank 3 = "+ str(info)
 
 horizontal=buscarHorizontal()
 vertical=buscarVertical()
