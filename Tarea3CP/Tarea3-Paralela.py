@@ -1,0 +1,143 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep  8 14:31:26 2014
+
+@author: paralela
+"""
+import numpy as np
+from StringIO import StringIO 
+
+
+# Se buscará de forma horizontal hacia la derecha hasta el casillero 17,
+# esto es para no estar repitiendo operaciones y limitar el recorrido por fila
+# hasta j=17
+# el valor de "c" ayudará a calcular sin tener que moverse en la posición del indice
+# en donde se empieza a calcular, para posteriormente, retornar el valor mayor y una lista
+# que esta compuesta consecutivamente por lso indices y valor del primer valor
+# hasta el 4to valor, que contribuyen a los cuatros valores que la productoria
+# será la mayor, en este caso solo horizontal.
+def buscarHorizontal():
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    lista= []
+    lista_mayor=[]
+    for i in range (20):
+        for j in range (17):
+            for c in range (4):
+                lista=lista+ [i,j+c,data[i][j+c]]
+                multi=multi*data[i][j+c]
+            result=multi
+            multi=1
+            if (result>valor_mayor):
+                valor_mayor=result
+                lista_mayor=lista
+            else:
+                lista=[]
+    return (valor_mayor,lista_mayor)   
+
+# Al igual que la funcion anterior, la funcion buscarVertical, hará la búsqueda
+# de forma vertical hacia abajo, para no repetir operaciónes y hasta i=17         
+            
+def buscarVertical():
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    lista= []
+    lista_mayor=[]
+    for i in range (17):
+        for j in range (20):
+            for c in range (4):
+                lista=lista+ [i+c,j,data[i+c][j]]
+                multi=multi*data[i+c][j]
+            result=multi
+            multi=1
+            if (result>valor_mayor):
+                valor_mayor=result
+                lista_mayor=lista
+            else:
+                lista=[] 
+    return (valor_mayor,lista_mayor)             
+            
+# Esta función cumple el mismo principio de busqueda que las dos funciones
+# anteriores variando solo la variable "c" y limitando filas y columnas hasta 
+# los casilleros 17
+def buscarDiagonal():
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    lista= []
+    lista_mayor=[]
+    for i in range (17):
+        for j in range (17):
+            for c in range (4):
+                lista=lista+ [i+c,j+c,data[i+c][j+c]]
+                multi=multi*data[i+c][j+c]
+            result=multi
+            multi=1
+            if (result>valor_mayor):
+                valor_mayor=result
+                lista_mayor=lista
+            else:
+                lista=[]
+    return (valor_mayor,lista_mayor) 
+    
+# Recibe los resultados de cada busqueda y devuelve el de mayor resultado
+def comparar (horizontal,vertical,diagonal):
+    if(horizontal[0]>vertical[0] and horizontal[0]>diagonal[0]):
+        return horizontal
+    else:
+        if(vertical[0]>diagonal[0] and vertical[0]>horizontal[0]):
+            return vertical
+        else:
+            if(diagonal[0]>vertical[0] and diagonal[0]>horizontal[0]):
+                return diagonal
+        
+
+    
+   
+#----------MAIN--------------------------
+ 
+#----datos iniciales---------------------  
+
+#Se comenzará por generar la una matriz a partir de lso datos entregados...
+#... en un archivo txt
+pfile=open('Tarea3.txt','r')
+data=pfile.read()
+pfile.close()
+print""
+
+#se sobre entiende que los delimitadores son espacios
+data=np.genfromtxt(StringIO(data)) 
+
+horizontal=buscarHorizontal()
+vertical=buscarVertical()
+diagonal=buscarDiagonal()
+
+mejor=comparar(horizontal,vertical,diagonal)
+
+print ""
+print "--Resultado--"
+print ""
+print "Matriz["+str(mejor[1][0])+"]["+str(mejor[1][1])+"]="+str(mejor[1][2])
+print "Matriz["+str(mejor[1][3])+"]["+str(mejor[1][4])+"]="+str(mejor[1][5])
+print "Matriz["+str(mejor[1][6])+"]["+str(mejor[1][7])+"]="+str(mejor[1][8])
+print "Matriz["+str(mejor[1][9])+"]["+str(mejor[1][10])+"]="+str(mejor[1][11])
+print ""
+print str(mejor[1][2])+" x "+str(mejor[1][5])+" x "+str(mejor[1][8])+" x "+str(mejor[1][11])+" = "+str(mejor[0])
+        
+    
+
+
+
+
+
+
+
+
