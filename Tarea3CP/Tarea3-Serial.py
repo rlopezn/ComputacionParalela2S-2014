@@ -6,6 +6,8 @@ Created on Mon Sep  8 14:31:26 2014
 """
 import numpy as np
 from StringIO import StringIO 
+import time
+
 
 
 # Se buscará de forma horizontal hacia la derecha hasta el casillero 17,
@@ -103,7 +105,7 @@ def comparar (horizontal,vertical,diagonal):
     
    
 #----------MAIN--------------------------
- 
+starting_point=time.time()
 #----datos iniciales---------------------  
 
 #Se comenzará por generar la una matriz a partir de lso datos entregados...
@@ -123,7 +125,7 @@ diagonal=buscarDiagonal()
 mejor=comparar(horizontal,vertical,diagonal)
 
 print ""
-print "--Resultado--"
+print "--Result--"
 print ""
 print "Matriz["+str(mejor[1][0])+"]["+str(mejor[1][1])+"]="+str(mejor[1][2])
 print "Matriz["+str(mejor[1][3])+"]["+str(mejor[1][4])+"]="+str(mejor[1][5])
@@ -132,8 +134,15 @@ print "Matriz["+str(mejor[1][9])+"]["+str(mejor[1][10])+"]="+str(mejor[1][11])
 print ""
 print str(mejor[1][2])+" x "+str(mejor[1][5])+" x "+str(mejor[1][8])+" x "+str(mejor[1][11])+" = "+str(mejor[0])
         
-    
 
+#Calculo de tiempo
+elapsed_time=time.time()-starting_point
+elapsed_time_int = int(elapsed_time)
+print ""
+print "Time [seconds]: " + str(elapsed_time)
+elapsed_time_minutes = elapsed_time_int/60
+elapsed_time_seconds = elapsed_time_int%60
+print "Time [min:sec]: "+ str(elapsed_time_minutes) + ":" + str(elapsed_time_seconds)
 
 
 
