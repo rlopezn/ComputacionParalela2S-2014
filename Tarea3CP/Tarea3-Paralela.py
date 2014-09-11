@@ -16,12 +16,15 @@ rank =  comm.rank     # id procesador actual
 size =  comm.size     # cantidad de procesadores a usar
 
 def distribuirP(size):
-    c= (20*20)/size #c : cuociente
-    r= (20*20)%size #r : resto
+
     if (rank==0):
-        print c
-        print r
-        #for i in range (20*20/size)
+        cuoc= (20*20)/size #c : cuociente
+        rest= (20*20)%size #r : resto
+        conta=0
+        p=0
+        for p in range (size):
+            comm.send (conta, dest = p)
+            
 
 # Se buscará de forma horizontal hacia la derecha hasta el casillero 17,
 # esto es para no estar repitiendo operaciones y limitar el recorrido por fila
