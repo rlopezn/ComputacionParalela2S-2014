@@ -88,7 +88,7 @@ def buscarDiagonal():
                 lista=[]
     return (valor_mayor,lista_mayor) 
     
-# Recibe lso resultados de cada busqueda y devuelve el de mayor resultado
+# Recibe los resultados de cada busqueda y devuelve el de mayor resultado
 def comparar (horizontal,vertical,diagonal):
     if(horizontal[0]>vertical[0] and horizontal[0]>diagonal[0]):
         return horizontal
