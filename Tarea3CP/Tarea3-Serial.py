@@ -51,7 +51,7 @@ def buscarVertical():
     valor_mayor=-1
     lista= []
     lista_mayor=[]
-    for i in range (20):
+    for i in range (17):
         for j in range (20):
             for c in range (4):
                 lista=lista+ [i+c,j,data[i+c][j]]
