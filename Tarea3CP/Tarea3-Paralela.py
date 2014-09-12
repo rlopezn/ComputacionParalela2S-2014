@@ -11,10 +11,18 @@ from mpi4py import MPI
 
 starting_point=time.time()
 
+#Para cada procesador ingresado por el terminal, ya sea "np"=4 o "np"=12 va a funcionar de la misma forma,
+#la distribución para que los "np" procesadores, será dividir la cantidad total de datos 
+#por la cantidad de procesado, dejandolos de forma pareja. En el caso que sobren será asignado para
+#el ultimo procesador. A continuación se describiran brevemente que realizarán cada función
+
+
 comm = MPI.COMM_WORLD  # comunicador entre dos procesadores
 rank =  comm.rank     # id procesador actual 
 size =  comm.size     # cantidad de procesadores a usar
 
+# En esta funcion se mandara a cada procesador la cantidad de datos con la que trabajaran
+# Si sobran datos para que sean parejos, se le asignara al ultimo procesador
 def distribuirEnP(size):
     if (rank==0):
         print ""
@@ -32,13 +40,16 @@ def distribuirEnP(size):
                 conta=conta+cuoc+rest
                 comm.send (conta, dest = p)
                 
-
+# El procesador 0 recibirá las cantidad de datos con la que trabajará 
+# cada procesador para devolver los indice i y j hasta donde operará
 def buscarRangos():
     if rank==0:
         p=0
         conta=0
-        rangos=[]
+        rangos_ini=[0,0]
+        rangos_end=[]
         valor=0
+        comm.send(rangos_ini,dest=p)
         for i in range(20):
             for j in range (20):
                 if(valor==0):
@@ -48,9 +59,11 @@ def buscarRangos():
 #                print "p = "+str(p)
 #                print "conta: "+str(conta)
                 if conta==valor:
-                    rangos = rangos + [i,j]
-                    comm.send(rangos,dest=p)
-                    rangos=[]
+                    rangos_end = rangos_end + [i,j]
+                    comm.send(rangos_ini,dest=p)
+                    comm.send(rangos_end,dest=p)
+                    rangos_ini=rangos_end
+                    rangos_end=[]
                     p = p + 1
                     conta = conta + 1
                     valor=0
@@ -157,18 +170,22 @@ def buscarRangos():
 
 #-------------MAIN--------------------- 
 
-#Se comenzará por generar la una matriz a partir de lso datos entregados...
-#... en un archivo txt
+# Se comenzará por generar la una matriz a partir de lso datos entregados
+# en un archivo txt
 
 pfile=open('Tarea3.txt','r')
 data=pfile.read()
 pfile.close()
 
 
-#se sobre entiende que los delimitadores son espacios
+# Se sobre entiende que los delimitadores son espacios
 data=np.genfromtxt(StringIO(data)) 
 
-distribuirEnP(size)
+# El procesador 0 estará a cargo de mandar la cantidad de datos 
+# para cada procesador
+if rank==0:
+    distribuirEnP(size)
+    
 rango=comm.recv(source=0)
 rango=rango-1
 comm.send(rango,dest=0)
@@ -178,21 +195,26 @@ if rank==0:
 
 
 
-#if rank==0:
-#    info=comm.recv(source=0)
-#    print "rank 0 = "+ str(info)
-#if rank==1:
-#    info=comm.recv(source=0)
-#    print "rank 1 = "+ str(info)
-#if rank==2:
-#    info=comm.recv(source=0)
-#    print "rank 2 = "+ str(info)
-#if rank==3:
-#    info=comm.recv(source=0)
-#    print "rank 3 = "+ str(info)
+if rank==0:
+    ini=comm.recv(source=0)
+    end=comm.recv(source=0)
+    print "rank 0 = "+ str(ini) + "," + str(end)
+if rank==1:
+    ini=comm.recv(source=0)
+    end=comm.recv(source=0)
+    print "rank 2 = "+ str(ini) + "," + str(end)
+if rank==2:
+    ini=comm.recv(source=0)
+    end=comm.recv(source=0)
+    print "rank 3 = "+ str(ini) + "," + str(end)
+if rank==3:
+    ini=comm.recv(source=0)
+    end=comm.recv(source=0)
+    print "rank 5 = "+ str(ini) + "," + str(end)
 #if rank==4:
-#    info=comm.recv(source=0)
-#    print "rank 4 = "+ str(info)
+#    ini=comm.recv(source=0)
+#    end=comm.recv(source=0)
+#    print "rank 0 = "+ str(ini) + "," + str(end)
 #if rank==5:
 #    info=comm.recv(source=0)
 #    print "rank 5 = "+ str(info)
@@ -222,7 +244,7 @@ if rank==0:
 #vertical=buscarVertical(info)
 #diagonal=buscarDiagonal(info)
 
-if rank==0:
+if rank==2:
 #    mejor=comparar(horizontal,vertical,diagonal)
 #    print "--Result--"
 #    print ""
