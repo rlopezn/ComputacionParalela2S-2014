@@ -155,8 +155,7 @@ def buscarRangos():
     
    
 
-#----------MAIN--------------------------
-#----------MAIN--------------------------  
+#-------------MAIN--------------------- 
 
 #Se comenzará por generar la una matriz a partir de lso datos entregados...
 #... en un archivo txt
@@ -170,7 +169,6 @@ pfile.close()
 data=np.genfromtxt(StringIO(data)) 
 
 distribuirEnP(size)
-
 rango=comm.recv(source=0)
 rango=rango-1
 comm.send(rango,dest=0)
@@ -179,18 +177,43 @@ if rank==0:
     buscarRangos()
 
 
-if rank==0:
-    info=comm.recv(source=0)
-    print "rank 0 = "+ str(info)
-if rank==1:
-    info=comm.recv(source=0)
-    print "rank 1 = "+ str(info)
-if rank==2:
-    info=comm.recv(source=0)
-    print "rank 2 = "+ str(info)
-if rank==3:
-    info=comm.recv(source=0)
-    print "rank 3 = "+ str(info)
+
+#if rank==0:
+#    info=comm.recv(source=0)
+#    print "rank 0 = "+ str(info)
+#if rank==1:
+#    info=comm.recv(source=0)
+#    print "rank 1 = "+ str(info)
+#if rank==2:
+#    info=comm.recv(source=0)
+#    print "rank 2 = "+ str(info)
+#if rank==3:
+#    info=comm.recv(source=0)
+#    print "rank 3 = "+ str(info)
+#if rank==4:
+#    info=comm.recv(source=0)
+#    print "rank 4 = "+ str(info)
+#if rank==5:
+#    info=comm.recv(source=0)
+#    print "rank 5 = "+ str(info)
+#if rank==6:
+#    info=comm.recv(source=0)
+#    print "rank 6 = "+ str(info)
+#if rank==7:
+#    info=comm.recv(source=0)
+#    print "rank 7 = "+ str(info)
+#if rank==8:
+#    info=comm.recv(source=0)
+#    print "rank 8 = "+ str(info)
+#if rank==9:
+#    info=comm.recv(source=0)
+#    print "rank 9 = "+ str(info)
+#if rank==10:
+#    info=comm.recv(source=0)
+#    print "rank10 = "+ str(info)
+#if rank==11:
+#    info=comm.recv(source=0)
+#    print "rank11 = "+ str(info)
 
     
 
