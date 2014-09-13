@@ -42,28 +42,37 @@ def distribuirEnP(size):
                 
 # El procesador 0 recibirá las cantidad de datos con la que trabajará 
 # cada procesador para devolver los indice i y j hasta donde operará
-def buscarRangos():
+def buscarRangoFinal(size):
     if rank==0:
         p=0
         conta=0
         rangos_ini=[0,0]
         rangos_end=[]
         valor=0
-        comm.send(rangos_ini,dest=p)
+#        comm.send(rangos_ini,dest=p)
         for i in range(20):
             for j in range (20):
                 if(valor==0):
                     valor=comm.recv(source=p)
+                    print valor
 #                print "i,j = "+str(i)+","+str(j)
 #                print "recv: "+ str(valor)
 #                print "p = "+str(p)
 #                print "conta: "+str(conta)
                 if conta==valor:
                     rangos_end = rangos_end + [i,j]
-                    comm.send(rangos_ini,dest=p)
+#                    print "ini: "+ str(rangos_ini)
+                    print "end: "+ str(rangos_end)
+#                    comm.send(rangos_ini,dest=p)
                     comm.send(rangos_end,dest=p)
-                    rangos_ini=rangos_end
                     rangos_end=[]
+#                    if p!=size:
+#                        if j==19:
+#                            i=i+1
+#                            j=0
+#                            rangos_ini=[i,j]
+                            
+                        
                     p = p + 1
                     conta = conta + 1
                     valor=0
@@ -191,26 +200,26 @@ rango=rango-1
 comm.send(rango,dest=0)
 
 if rank==0:
-    buscarRangos()
+    buscarRangoFinal(size)
 
 
 
 if rank==0:
-    ini=comm.recv(source=0)
+#    ini=comm.recv(source=0)
     end=comm.recv(source=0)
-    print "rank 0 = "+ str(ini) + "," + str(end)
+    print "rank 0 = "+ str(end[0])+" "+ str(end[1])
 if rank==1:
-    ini=comm.recv(source=0)
+#    ini=comm.recv(source=0)
     end=comm.recv(source=0)
-    print "rank 2 = "+ str(ini) + "," + str(end)
+    print "rank 1 = "+ str(end)
 if rank==2:
-    ini=comm.recv(source=0)
+#    ini=comm.recv(source=0)
     end=comm.recv(source=0)
-    print "rank 3 = "+ str(ini) + "," + str(end)
+    print "rank 2 = "+ str(end)
 if rank==3:
-    ini=comm.recv(source=0)
+#    ini=comm.recv(source=0)
     end=comm.recv(source=0)
-    print "rank 5 = "+ str(ini) + "," + str(end)
+    print "rank 3 = "+ str(end)
 #if rank==4:
 #    ini=comm.recv(source=0)
 #    end=comm.recv(source=0)
