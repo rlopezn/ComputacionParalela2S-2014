@@ -24,37 +24,40 @@ size =  comm.size     # cantidad de procesadores a usar
 # En esta funcion se mandara a cada procesador la cantidad de datos con la que trabajaran
 # Si sobran datos para que sean parejos, se le asignara al ultimo procesador
 def distribuirEnP(size):
+    print ""
+    print ""
+    print " Funcion distribuirenP("+str(size)+")"
     if (rank==0):
-        print ""
-        print ""
         cuoc= (20*20)/size #c : cuociente
         rest= (20*20)%size #r : resto
-        ##print "resto:" +str(rest)
         conta=0
         for p in range (size):
-            #print p
+            print "p: "+str(p)
             if (p+1)!=size:
                 conta=conta+cuoc
+                print "Enviar a "+str(p)+" el valor: "+str(conta)
                 comm.send (conta, dest = p)
             else:
                 conta=conta+cuoc+rest
+                print "Enviar a "+str(p)+" el valor: "+str(conta)
                 comm.send (conta, dest = p)
                 
 # El procesador 0 recibirá las cantidad de datos con la que trabajará 
 # cada procesador para devolver los indice i y j hasta donde operará
 def buscarRangoFinal(size):
+    print ""
+    print ""
+    print " Funcion buscarRangoFinal("+str(size)+")"
     if rank==0:
         p=0
         conta=0
-        rangos_ini=[0,0]
         rangos_end=[]
         valor=0
-#        comm.send(rangos_ini,dest=p)
         for i in range(20):
             for j in range (20):
                 if(valor==0):
                     valor=comm.recv(source=p)
-                    print valor
+                    #print valor
 #                print "i,j = "+str(i)+","+str(j)
 #                print "recv: "+ str(valor)
 #                print "p = "+str(p)
@@ -62,7 +65,7 @@ def buscarRangoFinal(size):
                 if conta==valor:
                     rangos_end = rangos_end + [i,j]
 #                    print "ini: "+ str(rangos_ini)
-                    print "end: "+ str(rangos_end)
+                    print "Enviar a "+str(p)+" el rango: "+ str(rangos_end)
 #                    comm.send(rangos_ini,dest=p)
                     comm.send(rangos_end,dest=p)
                     rangos_end=[]
@@ -71,8 +74,6 @@ def buscarRangoFinal(size):
 #                            i=i+1
 #                            j=0
 #                            rangos_ini=[i,j]
-                            
-                        
                     p = p + 1
                     conta = conta + 1
                     valor=0
@@ -202,49 +203,44 @@ comm.send(rango,dest=0)
 if rank==0:
     buscarRangoFinal(size)
 
-
-
+##
+##
+##
+##
+##            CON LOS RANGOS FINALES HACER LOS CALCULOS
+##
+##
+##
+##
+##
+##
+##
+#if rank==0:
+#    i=0
+#    print size
+#    for i in range(size):
+#        r=comm.recv(source=i)
+#        print "r: "+ str(r)
 if rank==0:
-#    ini=comm.recv(source=0)
-    end=comm.recv(source=0)
-    print "rank 0 = "+ str(end[0])+" "+ str(end[1])
+    print "Rank "+str(rank)+" recibe: "+str(comm.recv(source=rank))
 if rank==1:
-#    ini=comm.recv(source=0)
-    end=comm.recv(source=0)
-    print "rank 1 = "+ str(end)
-if rank==2:
-#    ini=comm.recv(source=0)
-    end=comm.recv(source=0)
-    print "rank 2 = "+ str(end)
-if rank==3:
-#    ini=comm.recv(source=0)
-    end=comm.recv(source=0)
-    print "rank 3 = "+ str(end)
-#if rank==4:
-#    ini=comm.recv(source=0)
+    print "Rank "+str(rank)+" recibe: "+str(comm.recv(source=rank))
+#if rank==0
+##    ini=comm.recv(source=0)
 #    end=comm.recv(source=0)
-#    print "rank 0 = "+ str(ini) + "," + str(end)
-#if rank==5:
-#    info=comm.recv(source=0)
-#    print "rank 5 = "+ str(info)
-#if rank==6:
-#    info=comm.recv(source=0)
-#    print "rank 6 = "+ str(info)
-#if rank==7:
-#    info=comm.recv(source=0)
-#    print "rank 7 = "+ str(info)
-#if rank==8:
-#    info=comm.recv(source=0)
-#    print "rank 8 = "+ str(info)
-#if rank==9:
-#    info=comm.recv(source=0)
-#    print "rank 9 = "+ str(info)
-#if rank==10:
-#    info=comm.recv(source=0)
-#    print "rank10 = "+ str(info)
-#if rank==11:
-#    info=comm.recv(source=0)
-#    print "rank11 = "+ str(info)
+#    print "rank 0 = "+ str(end[0])+" "+ str(end[1])
+#if rank==1:
+##    ini=comm.recv(source=0)
+#    end=comm.recv(source=0)
+#    print "rank 1 = "+ str(end)
+#if rank==2:
+##    ini=comm.recv(source=0)
+#    end=comm.recv(source=0)
+#    print "rank 2 = "+ str(end)
+#if rank==3:
+##    ini=comm.recv(source=0)
+#    end=comm.recv(source=0)
+#    print "rank 3 = "+ str(end)
 
     
 
@@ -253,7 +249,7 @@ if rank==3:
 #vertical=buscarVertical(info)
 #diagonal=buscarDiagonal(info)
 
-if rank==2:
+#if rank==0:
 #    mejor=comparar(horizontal,vertical,diagonal)
 #    print "--Result--"
 #    print ""
@@ -266,10 +262,10 @@ if rank==2:
             
     
     #Calculo de tiempo
-    elapsed_time=time.time()-starting_point
-    elapsed_time_int = int(elapsed_time)
-    print ""
-    print "Time [seconds]: " + str(elapsed_time)
-    elapsed_time_minutes = elapsed_time_int/60
-    elapsed_time_seconds = elapsed_time_int%60
-    print "Time [min:sec]: "+ str(elapsed_time_minutes) + ":" + str(elapsed_time_seconds)
+#    elapsed_time=time.time()-starting_point
+#    elapsed_time_int = int(elapsed_time)
+#    print ""
+#    print "Time [seconds]: " + str(elapsed_time)
+#    elapsed_time_minutes = elapsed_time_int/60
+#    elapsed_time_seconds = elapsed_time_int%60
+#    print "Time [min:sec]: "+ str(elapsed_time_minutes) + ":" + str(elapsed_time_seconds)
