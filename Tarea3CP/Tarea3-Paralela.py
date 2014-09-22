@@ -11,6 +11,7 @@ from mpi4py import MPI
 
 starting_point=time.time()
 
+#Explicacion serial
 #Para cada procesador ingresado por el terminal, ya sea "np"=4 o "np"=12 va a funcionar de la misma forma,
 #la distribución para que los "np" procesadores, será dividir la cantidad total de datos 
 #por la cantidad de procesado, dejandolos de forma pareja. En el caso que sobren será asignado para
@@ -32,7 +33,6 @@ def distribuirEnP(size):
         rest= (20*20)%size #r : resto
         conta=0
         for p in range (size):
-            print "p: "+str(p)
             if (p+1)!=size:
                 conta=conta+cuoc
                 print "Enviar a "+str(p)+" el valor: "+str(conta)
@@ -64,16 +64,8 @@ def buscarRangoFinal(size):
 #                print "conta: "+str(conta)
                 if conta==valor:
                     rangos_end = rangos_end + [i,j]
-#                    print "ini: "+ str(rangos_ini)
                     print "Enviar a "+str(p)+" el rango: "+ str(rangos_end)
-#                    comm.send(rangos_ini,dest=p)
                     comm.send(rangos_end,dest=p)
-                    rangos_end=[]
-#                    if p!=size:
-#                        if j==19:
-#                            i=i+1
-#                            j=0
-#                            rangos_ini=[i,j]
                     p = p + 1
                     conta = conta + 1
                     valor=0
@@ -83,34 +75,35 @@ def buscarRangoFinal(size):
             
 
 # Se buscará de forma horizontal hacia la derecha hasta el casillero 17,
-# esto es para no estar repitiendo operaciones y limitar el recorrido por fila
+# esto es para no estarsize repitiendo operaciones y limitar el recorrido por fila
 # hasta j=17
 # el valor de "c" ayudará a calcular sin tener que moverse en la posición del indice
 # en donde se empieza a calcular, para posteriormente, retornar el valor mayor y una lista
 # que esta compuesta consecutivamente por lso indices y valor del primer valor
 # hasta el 4to valor, que contribuyen a los cuatros valores que la productoria
 # será la mayor, en este caso solo horizontal.
-#def buscarHorizontal():
-#    i=0
-#    j=0
-#    c=0
-#    multi=1
-#    valor_mayor=-1
-#    lista= []
-#    lista_mayor=[]
-#    for i in range (20):
-#        for j in range (17):
-#            for c in range (4):
-#                lista=lista+ [i,j+c,data[i][j+c]]
-#                multi=multi*data[i][j+c]
-#            result=multi
-#            multi=1
-#            if (result>valor_mayor):
-#                valor_mayor=result
-#                lista_mayor=lista
-#            else:
-#                lista=[]
-#    return (valor_mayor,lista_mayor)   
+def buscarHorizontal(fin):
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    lista= []
+    lista_mayor=[]
+    for i in range (20):
+        for j in range (17):
+            if i<=fin[0] and j<=fin[1]:
+                for c in range (4):
+                    lista=lista+ [i,j+c,data[i][j+c]]
+                    multi=multi*data[i][j+c]
+                result=multi
+                multi=1
+                if (result>valor_mayor):
+                    valor_mayor=result
+                    lista_mayor=lista
+                else:
+                    lista=[]
+    return (valor_mayor,lista_mayor)   
 
 # Al igual que la funcion anterior, la funcion buscarVertical, hará la búsqueda
 # de forma vertical hacia abajo, para no repetir operaciónes y hasta i=17         
@@ -202,54 +195,15 @@ comm.send(rango,dest=0)
 
 if rank==0:
     buscarRangoFinal(size)
-
-##
-##
-##
-##
-##            CON LOS RANGOS FINALES HACER LOS CALCULOS
-##
-##
-##
-##
-##
-##
-##
-#if rank==0:
-#    i=0
-#    print size
-#    for i in range(size):
-#        r=comm.recv(source=i)
-#        print "r: "+ str(r)
-if rank==0:
-    print "Rank "+str(rank)+" recibe: "+str(comm.recv(source=rank))
-if rank==1:
-    print "Rank "+str(rank)+" recibe: "+str(comm.recv(source=rank))
-#if rank==0
-##    ini=comm.recv(source=0)
-#    end=comm.recv(source=0)
-#    print "rank 0 = "+ str(end[0])+" "+ str(end[1])
-#if rank==1:
-##    ini=comm.recv(source=0)
-#    end=comm.recv(source=0)
-#    print "rank 1 = "+ str(end)
-#if rank==2:
-##    ini=comm.recv(source=0)
-#    end=comm.recv(source=0)
-#    print "rank 2 = "+ str(end)
-#if rank==3:
-##    ini=comm.recv(source=0)
-#    end=comm.recv(source=0)
-#    print "rank 3 = "+ str(end)
-
-    
-
-
-#horizontal=buscarHorizontal()
+    init=[0,0]
+    fin = comm.recv(source=0)
+    comm.send(fin,dest=rank+1)
+horizontal=buscarHorizontal(fin)
+print horizontal
 #vertical=buscarVertical(info)
 #diagonal=buscarDiagonal(info)
 
-#if rank==0:
+if rank==0:
 #    mejor=comparar(horizontal,vertical,diagonal)
 #    print "--Result--"
 #    print ""
@@ -261,11 +215,13 @@ if rank==1:
 #    print str(mejor[1][2])+" x "+str(mejor[1][5])+" x "+str(mejor[1][8])+" x "+str(mejor[1][11])+" = "+str(mejor[0])
             
     
-    #Calculo de tiempo
-#    elapsed_time=time.time()-starting_point
-#    elapsed_time_int = int(elapsed_time)
-#    print ""
-#    print "Time [seconds]: " + str(elapsed_time)
-#    elapsed_time_minutes = elapsed_time_int/60
-#    elapsed_time_seconds = elapsed_time_int%60
-#    print "Time [min:sec]: "+ str(elapsed_time_minutes) + ":" + str(elapsed_time_seconds)
+#    Calculo de tiempo
+    elapsed_time=time.time()-starting_point
+    elapsed_time_int = int(elapsed_time)
+    print ""
+    print "Time [seconds]: " + str(elapsed_time)
+    elapsed_time_minutes = elapsed_time_int/60
+    elapsed_time_seconds = elapsed_time_int%60
+    print "Time [min:sec]: "+ str(elapsed_time_minutes) + ":" + str(elapsed_time_seconds)
+    print ""
+    print ""
