@@ -64,8 +64,16 @@ def buscarRangoFinal(size):
 #                print "conta: "+str(conta)
                 if conta==valor:
                     rangos_end = rangos_end + [i,j]
+#                    print "ini: "+ str(rangos_ini)
                     print "Enviar a "+str(p)+" el rango: "+ str(rangos_end)
+#                    comm.send(rangos_ini,dest=p)
                     comm.send(rangos_end,dest=p)
+                    rangos_end=[]
+#                    if p!=size:
+#                        if j==19:
+#                            i=i+1
+#                            j=0
+#                            rangos_ini=[i,j]
                     p = p + 1
                     conta = conta + 1
                     valor=0
@@ -195,9 +203,28 @@ comm.send(rango,dest=0)
 
 if rank==0:
     buscarRangoFinal(size)
-    init=[0,0]
-    fin = comm.recv(source=0)
-    comm.send(fin,dest=rank+1)
+
+
+##
+##
+##
+##
+##            CON LOS RANGOS FINALES HACER LOS CALCULOS
+##
+##
+##
+##
+##
+##
+##
+#if rank==0:
+#    i=0
+#    print size
+#    for i in range(size):
+#        r=comm.recv(source=i)
+#        print "r: "+ str(r)
+
+fin = comm.recv(source=0)
 horizontal=buscarHorizontal(fin)
 print horizontal
 #vertical=buscarVertical(info)

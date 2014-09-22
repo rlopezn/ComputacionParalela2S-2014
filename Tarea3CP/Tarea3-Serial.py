@@ -68,7 +68,7 @@ def buscarVertical():
 # Esta función cumple el mismo principio de busqueda que las dos funciones
 # anteriores variando solo la variable "c" y limitando filas y columnas hasta 
 # los casilleros 17
-def buscarDiagonal():
+def buscarDiagonalDer():
     i=0
     j=0
     c=0
@@ -90,16 +90,50 @@ def buscarDiagonal():
                 lista=[]
     return (valor_mayor,lista_mayor) 
     
+# Esta función cumple el mismo principio de busqueda que las dos funciones
+# anteriores variando solo la variable "c" y limitando filas y columnas hasta 
+# los casilleros 17
+def buscarDiagonalIzq():
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    lista= []
+    lista_mayor=[]
+    for i in range (17):
+        for j in range (20):
+            if j>=3:
+                for c in range (4):
+                    #print "data["+str(i)+"]["+str(j)+"]="+str(data[i][j])
+                    print "["+str(i+c)+"]["+str(j-c)+"]="+str(data[i+c][j-c])
+                    lista=lista+[i+c,j-c,data[i+c][j-c]]
+                    multi=multi*data[i+c][j-c]
+                result=multi
+                print "multi: "+ str(result)
+                multi=1
+                if (result>valor_mayor):
+                    valor_mayor=result
+                    lista_mayor=lista
+                    print "---indice mayor horizontal: "+str(valor_mayor)
+                    
+                else:
+                    lista=[]
+    return (valor_mayor,lista_mayor)
+    
 # Recibe los resultados de cada busqueda y devuelve el de mayor resultado
-def comparar (horizontal,vertical,diagonal):
-    if(horizontal[0]>vertical[0] and horizontal[0]>diagonal[0]):
+def comparar (horizontal,vertical,diagonalDer,diagonalIzq):
+    if(horizontal[0]>vertical[0] and horizontal[0]>diagonalDer[0] and horizontal[0]>diagonalIzq[0]):
         return horizontal
     else:
-        if(vertical[0]>diagonal[0] and vertical[0]>horizontal[0]):
+        if(vertical[0]>diagonalDer[0] and vertical[0]>horizontal[0] and vertical[0]>diagonalIzq[0]):
             return vertical
         else:
-            if(diagonal[0]>vertical[0] and diagonal[0]>horizontal[0]):
-                return diagonal
+            if(diagonalDer[0]>vertical[0] and diagonalDer[0]>horizontal[0] and diagonalDer[0]>diagonalIzq[0]):
+                return diagonalDer
+            else:
+                if(diagonalIzq[0]>vertical[0] and diagonalIzq[0]>horizontal[0] and diagonalIzq[0]>diagonalDer[0]):
+                    return diagonalIzq
         
 
     
@@ -120,9 +154,11 @@ data=np.genfromtxt(StringIO(data))
 
 horizontal=buscarHorizontal()
 vertical=buscarVertical()
-diagonal=buscarDiagonal()
+diagonalDer=buscarDiagonalDer()
+diagonalIzq=buscarDiagonalIzq()
+print diagonalIzq
 
-mejor=comparar(horizontal,vertical,diagonal)
+mejor=comparar(horizontal,vertical,diagonalDer,diagonalIzq)
 
 print ""
 print "--Result--"
