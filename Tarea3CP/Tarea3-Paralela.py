@@ -27,7 +27,7 @@ size =  comm.size     # cantidad de procesadores a usar
 def distribuirEnP(size):
     print ""
     print ""
-    print " Funcion distribuirenP("+str(size)+")"
+    #print " Funcion distribuirenP("+str(size)+")"
     if (rank==0):
         cuoc= (20*20)/size #c : cuociente
         rest= (20*20)%size #r : resto
@@ -35,11 +35,11 @@ def distribuirEnP(size):
         for p in range (size):
             if (p+1)!=size:
                 conta=conta+cuoc
-                print "Enviar a "+str(p)+" el valor: "+str(conta)
+                #print "Enviar a "+str(p)+" el valor: "+str(conta)
                 comm.send (conta, dest = p)
             else:
                 conta=conta+cuoc+rest
-                print "Enviar a "+str(p)+" el valor: "+str(conta)
+                #print "Enviar a "+str(p)+" el valor: "+str(conta)
                 comm.send (conta, dest = p)
                 
 # El procesador 0 recibirá las cantidad de datos con la que trabajará 
@@ -47,7 +47,7 @@ def distribuirEnP(size):
 def buscarRangoFinal(size):
     print ""
     print ""
-    print " Funcion buscarRangoFinal("+str(size)+")"
+    #print " Funcion buscarRangoFinal("+str(size)+")"
     if rank==0:
         p=0
         conta=0
@@ -65,7 +65,7 @@ def buscarRangoFinal(size):
                 if conta==valor:
                     rangos_end = rangos_end + [i,j]
 #                    print "ini: "+ str(rangos_ini)
-                    print "Enviar a "+str(p)+" el rango: "+ str(rangos_end)
+                    #print "Enviar a "+str(p)+" el rango: "+ str(rangos_end)
 #                    comm.send(rangos_ini,dest=p)
                     comm.send(rangos_end,dest=p)
                     rangos_end=[]
@@ -225,8 +225,29 @@ if rank==0:
 #        print "r: "+ str(r)
 
 fin = comm.recv(source=0)
-horizontal=buscarHorizontal(fin)
-print horizontal
+print str(rank)+" termina en: "+ str(fin)
+if rank==0:
+    ini=[0,0]
+    i=1
+    if size>0:
+        comm.send(fin,dest=1)
+#    while i<size:
+#        comm.send(fin,dest=i)
+#        print "Enviar de "+str(rank)+ ": "+str(fin)+" a "+ str(i)
+#        i=i+1
+    
+
+        
+if rank !=0:
+    #print rank
+    ini=comm.recv(source=rank-1)
+    print str(rank)+" inicia en: "+ str(ini)
+    if (rank+1)<size: 
+        comm.send(fin,dest=rank+1)
+        #print "Enviar de "+str(rank)+ ": "+str(fin)+" a "+ str(rank+1)
+    
+#horizontal=buscarHorizontal(fin)
+#print horizontal
 #vertical=buscarVertical(info)
 #diagonal=buscarDiagonal(info)
 
