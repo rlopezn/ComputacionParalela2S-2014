@@ -106,16 +106,16 @@ def buscarDiagonalIzq():
             if j>=3:
                 for c in range (4):
                     #print "data["+str(i)+"]["+str(j)+"]="+str(data[i][j])
-                    print "["+str(i+c)+"]["+str(j-c)+"]="+str(data[i+c][j-c])
+                    #print "["+str(i+c)+"]["+str(j-c)+"]="+str(data[i+c][j-c])
                     lista=lista+[i+c,j-c,data[i+c][j-c]]
                     multi=multi*data[i+c][j-c]
                 result=multi
-                print "multi: "+ str(result)
+                #print "multi: "+ str(result)
                 multi=1
                 if (result>valor_mayor):
                     valor_mayor=result
                     lista_mayor=lista
-                    print "---indice mayor horizontal: "+str(valor_mayor)
+                    #print "---indice mayor horizontal: "+str(valor_mayor)
                     
                 else:
                     lista=[]
@@ -156,7 +156,7 @@ horizontal=buscarHorizontal()
 vertical=buscarVertical()
 diagonalDer=buscarDiagonalDer()
 diagonalIzq=buscarDiagonalIzq()
-print diagonalIzq
+#print diagonalIzq
 
 mejor=comparar(horizontal,vertical,diagonalDer,diagonalIzq)
 
