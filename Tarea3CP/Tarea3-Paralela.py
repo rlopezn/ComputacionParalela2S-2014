@@ -25,9 +25,6 @@ size =  comm.size     # cantidad de procesadores a usar
 # En esta funcion se mandara a cada procesador la cantidad de datos con la que trabajaran
 # Si sobran datos para que sean parejos, se le asignara al ultimo procesador
 def distribuirEnP(size):
-    print ""
-    print ""
-    #print " Funcion distribuirenP("+str(size)+")"
     if (rank==0):
         cuoc= (20*20)/size #c : cuociente
         rest= (20*20)%size #r : resto
@@ -35,19 +32,14 @@ def distribuirEnP(size):
         for p in range (size):
             if (p+1)!=size:
                 conta=conta+cuoc
-                #print "Enviar a "+str(p)+" el valor: "+str(conta)
                 comm.send (conta, dest = p)
             else:
                 conta=conta+cuoc+rest
-                #print "Enviar a "+str(p)+" el valor: "+str(conta)
                 comm.send (conta, dest = p)
                 
 # El procesador 0 recibirá las cantidad de datos con la que trabajará 
 # cada procesador para devolver los indice i y j hasta donde operará
 def buscarRangoFinal(size):
-    print ""
-    print ""
-    #print " Funcion buscarRangoFinal("+str(size)+")"
     if rank==0:
         p=0
         conta=0
@@ -57,23 +49,10 @@ def buscarRangoFinal(size):
             for j in range (20):
                 if(valor==0):
                     valor=comm.recv(source=p)
-                    #print valor
-#                print "i,j = "+str(i)+","+str(j)
-#                print "recv: "+ str(valor)
-#                print "p = "+str(p)
-#                print "conta: "+str(conta)
                 if conta==valor:
                     rangos_end = rangos_end + [i,j]
-#                    print "ini: "+ str(rangos_ini)
-                    #print "Enviar a "+str(p)+" el rango: "+ str(rangos_end)
-#                    comm.send(rangos_ini,dest=p)
                     comm.send(rangos_end,dest=p)
                     rangos_end=[]
-#                    if p!=size:
-#                        if j==19:
-#                            i=i+1
-#                            j=0
-#                            rangos_ini=[i,j]
                     p = p + 1
                     conta = conta + 1
                     valor=0
@@ -90,7 +69,7 @@ def buscarRangoFinal(size):
 # que esta compuesta consecutivamente por lso indices y valor del primer valor
 # hasta el 4to valor, que contribuyen a los cuatros valores que la productoria
 # será la mayor, en este caso solo horizontal.
-def buscarHorizontal(fin):
+def buscarHorizontal(ini,fin):
     i=0
     j=0
     c=0
@@ -98,19 +77,53 @@ def buscarHorizontal(fin):
     valor_mayor=-1
     lista= []
     lista_mayor=[]
-    for i in range (20):
-        for j in range (17):
-            if i<=fin[0] and j<=fin[1]:
+#    print "ini: " + str(ini)
+#    print "fin: " + str(fin)
+    if ini[1]>=17:
+#        print "--pos: "+str(i)+","+str(j)
+        if ini[0] != 19:
+            ini[0]=ini[0]+1
+        else:
+            i=fin[0]
+            j=fin[1]
+        ini[1]=0
+    for i in range (ini[0],fin[0]+1):
+#        if ini[1]>=17:
+#            print "--pos: "+str(i)+","+str(j)
+#            if ini[0] != 19:
+#                ini[0]=ini[0]+1
+#            else:
+#                i=fin[0]
+#                j=fin[1]
+#            ini[1]=0
+        for j in range (ini[1],fin[1]+1):
+#            print ""
+#            print "j: " + str(j)
+#            print "j- ini: " + str(ini)
+#            print "j- fin: " + str(fin)
+#            print "pos: "+str(i)+","+str(j)
+            if j<17:
                 for c in range (4):
+                    if c==0:
+                        lista=[]
                     lista=lista+ [i,j+c,data[i][j+c]]
+#                    print "["+str(i)+"]["+str(c+j)+"]="+str(data[i][c+j])
                     multi=multi*data[i][j+c]
                 result=multi
+#                print "multi: "+ str(result)
                 multi=1
                 if (result>valor_mayor):
                     valor_mayor=result
+                    lista_mayor=[]
                     lista_mayor=lista
+#                    print "---indice mayor horizontal: ["+str(i)+"]["+str(j)+"]= "+str(data[i][j])+" y el valor es "+str(valor_mayor)
+#                    print str(valor_mayor)+" -  "+str(lista_mayor)
                 else:
                     lista=[]
+#            else:
+#                j=19
+#                print "break"
+#                break
     return (valor_mayor,lista_mayor)   
 
 # Al igual que la funcion anterior, la funcion buscarVertical, hará la búsqueda
@@ -196,58 +209,39 @@ data=np.genfromtxt(StringIO(data))
 # para cada procesador
 if rank==0:
     distribuirEnP(size)
-    
+
+# Recibe la cantidad de datos en cada procesador
 rango=comm.recv(source=0)
 rango=rango-1
 comm.send(rango,dest=0)
 
+# Con la cantidad de datos se buscara el rango donde terminara de procesar en la matriz
 if rank==0:
     buscarRangoFinal(size)
 
+# Con la posición de termino se mandarán como punto de inicio para los procesadores siguientes
 
-##
-##
-##
-##
-##            CON LOS RANGOS FINALES HACER LOS CALCULOS
-##
-##
-##
-##
-##
-##
-##
-#if rank==0:
-#    i=0
-#    print size
-#    for i in range(size):
-#        r=comm.recv(source=i)
-#        print "r: "+ str(r)
-
+# Primero se inicia el procesador 1
 fin = comm.recv(source=0)
-print str(rank)+" termina en: "+ str(fin)
 if rank==0:
     ini=[0,0]
     i=1
     if size>0:
         comm.send(fin,dest=1)
-#    while i<size:
-#        comm.send(fin,dest=i)
-#        print "Enviar de "+str(rank)+ ": "+str(fin)+" a "+ str(i)
-#        i=i+1
-    
 
-        
+# Hasta los p procesadores
 if rank !=0:
-    #print rank
     ini=comm.recv(source=rank-1)
-    print str(rank)+" inicia en: "+ str(ini)
     if (rank+1)<size: 
         comm.send(fin,dest=rank+1)
-        #print "Enviar de "+str(rank)+ ": "+str(fin)+" a "+ str(rank+1)
-    
-#horizontal=buscarHorizontal(fin)
-#print horizontal
+
+print ""
+#print str(rank)+" empieza : "+ str(ini)
+#print str(rank)+" finaliza: "+ str(fin)
+
+
+horizontal=buscarHorizontal(ini,fin)
+print "Rank "+str(rank)+ ": " + str(horizontal)
 #vertical=buscarVertical(info)
 #diagonal=buscarDiagonal(info)
 
