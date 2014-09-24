@@ -83,9 +83,6 @@ def buscarHorizontal(ini,fin):
 #        print "--pos: "+str(i)+","+str(j)
         if ini[0] != 19:
             ini[0]=ini[0]+1
-        else:
-            i=fin[0]
-            j=fin[1]
         ini[1]=0
     for i in range (ini[0],fin[0]+1):
 #        if ini[1]>=17:
@@ -129,27 +126,49 @@ def buscarHorizontal(ini,fin):
 # Al igual que la funcion anterior, la funcion buscarVertical, hará la búsqueda
 # de forma vertical hacia abajo, para no repetir operaciónes y hasta i=17         
             
-#def buscarVertical(info):
-#    i=0
-#    j=0
-#    c=0
-#    multi=1
-#    valor_mayor=-1
-#    lista= []
-#    lista_mayor=[]
-#    for i in range (17):
-#        for j in range (20):
-#            for c in range (4):
-#                lista=lista+ [i+c,j,data[i+c][j]]
-#                multi=multi*data[i+c][j]
-#            result=multi
-#            multi=1
-#            if (result>valor_mayor):
-#                valor_mayor=result
-#                lista_mayor=lista
-#            else:
-#                lista=[] 
-#    return (valor_mayor,lista_mayor)             
+def buscarVertical(ini,fin):
+    i=0
+    j=0
+    c=0
+    multi=1
+    valor_mayor=-1
+    lista= []
+    lista_mayor=[]
+#    print "ini: " + str(ini)
+#    print "fin: " + str(fin)
+    # Modificación si hay llegamos al limite para trabajar verticalmente
+    if ini[0]>=17:
+#        print "--pos: "+str(i)+","+str(j)
+        if ini[1] != 19:
+            ini[1]=ini[1]+1
+        else:
+            ini[0]=ini[0]+1
+            ini[1]=0
+    # Modificación si hay llegamos al limite para trabajar horizontalmente
+    if ini[1]>=17:
+#        print "--pos: "+str(i)+","+str(j)
+        if ini[0] != 19:
+            ini[0]=ini[0]+1
+        ini[1]=0
+    for i in range (ini[0],fin[0]+1):
+        for j in range (ini[1],fin[1]+1):
+#            print "pos: "+str(i)+","+str(j)
+            if i<17:
+                for c in range (4):
+                    if c==0:
+                        lista=[]
+                    lista=lista+ [i+c,j,data[i+c][j]]
+                    multi=multi*data[i+c][j]
+                result=multi
+                multi=1
+                if (result>valor_mayor):
+                    valor_mayor=result
+                    lista_mayor=[]
+                    lista_mayor=lista
+#                    print "---indice mayor vertical: ["+str(i)+"]["+str(j)+"]= "+str(data[i][j])+" y el valor es "+str(valor_mayor)
+                else:
+                    lista=[] 
+    return (valor_mayor,lista_mayor)             
             
 # Esta función cumple el mismo principio de busqueda que las dos funciones
 # anteriores variando solo la variable "c" y limitando filas y columnas hasta 
@@ -235,14 +254,14 @@ if rank !=0:
     if (rank+1)<size: 
         comm.send(fin,dest=rank+1)
 
-print ""
 #print str(rank)+" empieza : "+ str(ini)
 #print str(rank)+" finaliza: "+ str(fin)
 
-
-horizontal=buscarHorizontal(ini,fin)
-print "Rank "+str(rank)+ ": " + str(horizontal)
-#vertical=buscarVertical(info)
+if rank!=4:
+#    horizontal=buscarHorizontal(ini,fin)
+#    print "Rank "+str(rank)+ ": " + str(horizontal)
+    vertical=buscarVertical(ini,fin)
+    print "Rank "+str(rank)+ ": " + str(vertical)
 #diagonal=buscarDiagonal(info)
 
 if rank==0:
