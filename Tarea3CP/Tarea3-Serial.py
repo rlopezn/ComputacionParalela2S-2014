@@ -181,6 +181,12 @@ elapsed_time_seconds = elapsed_time_int%60
 print "Time [min:sec]: "+ str(elapsed_time_minutes) + ":" + str(elapsed_time_seconds)
 
 
+archi=open('SerialTime.txt','w')
+archi.close()
+
+archi=open('SerialTime.txt','a')
+archi.write(str(elapsed_time))
+archi.close()
 
 
 
